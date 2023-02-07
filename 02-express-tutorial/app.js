@@ -25,6 +25,8 @@ const express = require("express");
 const path = require("path");
 const app = express();
 
+const { products, people } = require("./data");
+
 app.use(express.static("./public"));
 
 app.get("/", (req, res) => {
@@ -33,6 +35,21 @@ app.get("/", (req, res) => {
 
 app.get("/about", (req, res) => {
   res.status(200).send("about");
+});
+
+app.get("/api/products", (req, res) => {
+  const minProducts = products.map((product) => {
+    const { id, name, image, price } = product;
+    return { id, name, image, price };
+  });
+  res.json(minProducts);
+});
+
+app.get("/api/products/:id", (req, res) => {
+  const product = products.find((product) => {
+    return product.id === 1;
+  });
+  res.json(product);
 });
 
 app.all("*", (req, res) => {
