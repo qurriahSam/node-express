@@ -47,8 +47,11 @@ app.get("/api/products", (req, res) => {
 
 app.get("/api/products/:id", (req, res) => {
   const product = products.find((product) => {
-    return product.id === 1;
+    return product.id === parseInt(req.params.id);
   });
+  if (!product) {
+    res.status(404).send("product does not exist");
+  }
   res.json(product);
 });
 
