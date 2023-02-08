@@ -45,6 +45,23 @@ app.get("/api/products", (req, res) => {
   res.json(minProducts);
 });
 
+app.get("/api/products/query", (req, res) => {
+  const { search, limit } = req.query;
+  let sortProducts = [...products];
+  if (search) {
+    sortProducts = sortProducts.filter((product) => {
+      return product.name.startsWith(search);
+    });
+  }
+  if (limit) {
+    sortProducts = sortProducts.slice(0, parseInt(limit));
+  }
+  if (sortProducts.length < 1) {
+    return res.status(200).send("no product match search");
+  }
+  return res.status(200).send(sortProducts);
+});
+
 app.get("/api/products/:id", (req, res) => {
   const product = products.find((product) => {
     return product.id === parseInt(req.params.id);
